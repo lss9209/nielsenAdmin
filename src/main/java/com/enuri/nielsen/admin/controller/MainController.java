@@ -15,6 +15,7 @@ public class MainController {
     @GetMapping("/admin/main")
     public String adminMainView() {
         return "admin/main";
+
     }
 
 }
