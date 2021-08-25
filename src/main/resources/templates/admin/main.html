@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments.html :: head"></div>
+<title>닐슨 관리자페이지</title>
+<body>
+<div class="container" style="margin-left: 50px;">
+  <form th:action="@{/productList}" method="get" id="productListForm">
+    <div class="row" style="width:1800px; height:320px;">
+      <div class="col-2 mt-5 pt-3" style="border:1px solid black">
+        <div style="margin-bottom:5px;">조회할 기준열 선택</div>
+        <div style="border:1px solid black">
+          <label style="margin-right:5px"><input type="checkbox" name="userId" value="blue">유저아이디</label>
+          <label style="margin-right:5px"><input type="checkbox" name="enuriModelNo" value="red">ENR_MODEL_NO</label>
+          <label style="margin-right:5px"><input type="checkbox" name="productNo" value="red">PL_NO</label>
+          <label style="margin-right:5px"><input type="checkbox" name="channel" value="red">채널</label>
+        </div>
+      </div>
+      <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px;">
+        <div style="margin-bottom:5px;">조건 선택</div>
+        <div style="border:1px solid black">
+          <label style="margin-top:10px; margin-left:5px;">상품명 <input style="margin-left:16px" type="text" name="productName"></label>
+          <label style="margin-top:10px; margin-left:20px;">상품옵션명 <input type="text" name="productOptionName"></label>
+          <label style="margin-top:10px; margin-left:5px;">카테코드 <input type="text" name="categoryCode"></label>
+          <label style="margin-top:10px; margin-left:20px;">모델번호 <input style="margin-left:16px" type="text" name="modelNo"></label>
+          <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:17px" type="text" name="plNo"></label>
+          <label style="margin-top:10px; margin-left:20px;">구매일자 <input style="margin-left:16px" type="date" name="buyDateStart"></label><input type="date" name="buyDateEnd"></label>
+          <label style="margin-top:10px; margin-left:5px;">KAD/INDEX 선택
+            <select name="selectBetweenKadAndIndex">
+              <option>KAD</option>
+              <option>INDEX</option>
+            </select>
+          </label>
+          <label style="margin-top:10px; margin-left:8px;">KAD/INDEX 월선택 <input style="margin-left:16px" type="date" name="kadOrIndexMonthStart"></label><input type="date" name="kadOrIndexMonthEnd"></label>
+        </div>
+      </div>
+      <div class="col-2 mt-5 pt-3" style="border:1px solid black">
+        <div>정렬 선택</div>
+        <select class="custom-select" name="sort" form="productListForm">
+          <option>기본 정렬</option>
+          <option>PL_NO</option>
+          <option>쇼핑몰코드</option>
+          <option>모델번호</option>
+        </select>
+        <div style="margin-top:13px;">집계열 선택</div>
+        <select class="custom-select" name="aggregation" form="productListForm">
+          <option>사용 안함</option>
+          <option>SUM</option>
+          <option>COUNT</option>
+          <option>COUNT(DISTINCT)</option>
+        </select>
+        <div style="margin-top:13px;">집계 대상열 선택</div>
+        <select class="custom-select" name="aggregationTargetColumn" form="productListForm">
+          <option></option>
+          <option>유저아이디</option>
+          <option>ENR_MODEL_NO</option>
+          <option>PL_NO</option>
+          <option>채널</option>
+        </select>
+      </div>
+      <div class="col-4 mt-5 pt-3">
+      </div>
+    </div>
+  </form>
+
+  <div class="row" style="width:1800px; max-height:700px; overflow-y:scroll;">
+    <table class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
+      <colgroup>
+        <col span="1" style="width:4%">
+        <col span="1" style="width:6%">
+        <col span="1" style="width:10%">
+        <col span="1" style="width:10%">
+        <col span="1" style="width:18%">
+        <col span="1" style="width:22%">
+        <col span="1" style="width:10%">
+        <col span="1" style="width:10%">
+        <col span="1" style="width:10%">
+      </colgroup>
+      <thead>
+      <tr>
+        <th>No</th>
+        <th>BUY_DATE</th>
+        <th>PROC_PRD_VLU</th>
+        <th>ENR_MODEL_NO</th>
+        <th>GOODS_NAME</th>
+        <th>GOODS_OPTN_VLU</th>
+        <th>PL_NO</th>
+        <th>SMTD_SHOP_CODE</th>
+        <th>ADJ_BUY_QNTY</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>20210101</td>
+        <td>DF202012</td>
+        <td>9824858</td>
+        <td>제로콜라 355ml 24캔 1박스 안전포장</td>
+        <td>코카콜라 제로 캔: 콜라제로 2박스(+17500원)</td>
+        <td>6623324045</td>
+        <td>15</td>
+        <td>1</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <nav>
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" tabindex="-1" aria-disabled="true">
+            Previous
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">
+            Next
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+</body>
+</html>
