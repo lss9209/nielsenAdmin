@@ -1,15 +1,24 @@
 package com.enuri.nielsen.admin.controller;
 
+import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation;
+import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column;
+import com.enuri.nielsen.admin.domain.shoppingDiary.enums.DateCriterion;
+import com.enuri.nielsen.admin.domain.shoppingDiary.formDto.SearchInputForm;
+import com.enuri.nielsen.admin.domain.shoppingDiary.viewDto.SearchResult;
 import com.enuri.nielsen.infra.MockMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
 class SearchControllerTest {
@@ -20,6 +29,42 @@ class SearchControllerTest {
     @Test
     void showNielSenSearchView() throws Exception {
         mockMvc.perform(get("/admin/search"))
+                .andExpect(view().name("admin/search"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("닐슨 구매 내역 데이터 조회 조건 바인딩되는지 여부")
+    @Test
+    void checkCriterionBinding() throws Exception {
+        String[] selectedColumns = {"ENR_MODEL_NO", "PL_NO", "CHANNEL"};
+
+        SearchInputForm searchInputForm = new SearchInputForm();
+        Set<Column> expectedSelectedColumns = new HashSet<>();
+        expectedSelectedColumns.add(Column.ENR_MODEL_NO); expectedSelectedColumns.add(Column.PL_NO); expectedSelectedColumns.add(Column.CHANNEL);
+        searchInputForm.setSelectedColumnList(expectedSelectedColumns);
+        searchInputForm.setGoodsName("상품명");
+        searchInputForm.setGoodsOptionValue("옵션명");
+        searchInputForm.setEnuriRepCateCode("11111");
+        searchInputForm.setEnuriModelNo("");
+        searchInputForm.setStartBuyDate(LocalDate.parse("2021-08-03"));
+        searchInputForm.setDateCriterion(DateCriterion.INDEX);
+        searchInputForm.setSortTargetColumn(null);
+        searchInputForm.setAggregation(Aggregation.COUNT);
+        searchInputForm.setAggregationTargetColumn(Column.ENR_MODEL_NO);
+
+        mockMvc.perform(get("/admin/search")
+                        .param("selectedColumnList", selectedColumns)
+                        .param("goodsName", "상품명")
+                        .param("goodsOptionValue", "옵션명")
+                        .param("enuriRepCateCode", "11111")
+                        .param("enuriModelNo", "")
+                        .param("startBuyDate", "2021-08-03")
+                        .param("dateCriterion", "INDEX")
+                        .param("sortTargetColumn", "")
+                        .param("aggregation", "COUNT")
+                        .param("aggregationTargetColumn", "ENR_MODEL_NO")
+                )
+                .andExpect(model().attribute("searchInputForm", searchInputForm))
                 .andExpect(view().name("admin/search"))
                 .andExpect(status().isOk());
     }

@@ -7,16 +7,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.math.BigInteger;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Embeddable
-public class BuyHistoryRegisteredInShoppingDiaryId implements Serializable {
+public class ModelMasterInfoId implements Serializable {
 
-    @Column(name = "ITG_BUY_NO", nullable = false)
-    private long integrationBuyNo;
+    @Column(name = "PROC_PRD_VLU", nullable = false)
+    private String processingPeriodValue;
 
-    @Column(name = "SRC_TBL_ID", nullable = false)
-    private int sourceTableId;
+    @Column(name = "ENR_MODEL_NO", nullable = false)
+    private int enuriModelNo;
 }

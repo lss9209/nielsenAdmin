@@ -1,6 +1,6 @@
 package com.enuri.nielsen.admin.domain.shoppingDiary;
 
-import com.enuri.nielsen.admin.domain.shoppingDiary.compositePrimaryKeyClass.BuyHistoryRegisteredInShoppingDiaryId;
+import com.enuri.nielsen.admin.domain.shoppingDiary.compositePrimaryKeyClass.BuyHistoryId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,10 +8,10 @@ import javax.persistence.*;
 @Entity(name = "M_MONTH_DF_BUY_TRN")
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
-public class BuyHistoryRegisteredInShoppingDiary {
+public class BuyHistory {
 
     @EmbeddedId
-    BuyHistoryRegisteredInShoppingDiaryId buyHistoryRegisteredInShoppingDiaryKey;
+    BuyHistoryId buyHistoryId;
 
     @Column(name = "BUY_DATE")
     private String buyDate;
