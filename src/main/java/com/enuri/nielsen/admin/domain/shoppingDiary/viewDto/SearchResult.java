@@ -13,8 +13,6 @@ import javax.persistence.EmbeddedId;
 @NoArgsConstructor @AllArgsConstructor
 public class SearchResult {
 
-    private SearchMode searchMode;
-
     private String buyDate;
 
     private String processingPeriodValue;
@@ -32,4 +30,16 @@ public class SearchResult {
     private int adjustedBuyQuantity;
 
     private long aggregationResult;
+
+    public SearchResult(String buyDate, String processingPeriodValue, int enuriModelNo, String goodsName, String goodsOptionValue,
+                        long plNo, int smartDeliveryShoppingMallCode, int adjustedBuyQuantity) {
+        this.buyDate = buyDate;
+        this.processingPeriodValue = processingPeriodValue;
+        this.enuriModelNo = enuriModelNo;
+        this.goodsName = goodsName;
+        this.goodsOptionValue = goodsOptionValue;
+        this.plNo = plNo;
+        this.smartDeliveryShoppingMallCode = smartDeliveryShoppingMallCode;
+        this.adjustedBuyQuantity = adjustedBuyQuantity;
+    }
 }

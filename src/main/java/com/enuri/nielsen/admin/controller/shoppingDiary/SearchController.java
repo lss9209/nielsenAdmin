@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class SearchController {
@@ -27,10 +28,11 @@ public class SearchController {
     }
 
     @GetMapping("/admin/search")
-    public String adminMainView(@Valid SearchInputForm searchInputForm, Model model, Error error) {
+    public String search(@Valid SearchInputForm searchInputForm, Model model, Error error) {
         System.out.println(searchInputForm.toString());
-        SearchResult searchResult = buyHistoryService.search(searchInputForm);
+        List<SearchResult> searchResultList = buyHistoryService.search(searchInputForm);
         model.addAttribute("searchInputForm", searchInputForm);
+        model.addAttribute("searchResultList", searchResultList);
         return "admin/search";
     }
 

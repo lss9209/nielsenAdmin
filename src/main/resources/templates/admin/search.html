@@ -9,11 +9,15 @@
     <div class="row" style="width:1800px; height:320px;">
       <div class="col-2 mt-5 pt-3" style="border:1px solid black">
         <div style="margin-bottom:5px;">조회할 기준열 선택</div>
-        <div style="border:1px solid black">
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="USER_ID">유저아이디</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="ENR_MODEL_NO">ENR_MODEL_NO</label>
+        <div style="border:1px solid black; padding-left:5px;">
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="ENR_MODEL_NO">모델번호</label>
           <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="PL_NO">PL_NO</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="CHANNEL">채널</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="BUY_DATE">구매일자</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="GOODS_NAME">상품명</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="GOODS_OPTN_VLU">상품옵션값</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="PROC_PRD_VLU">처리기간일자</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="SMTD_SHOP_CODE">스마트택배쇼핑몰코드</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="ADJ_BUY_QNTY">보정구매수량</label>
         </div>
       </div>
       <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px;">
@@ -25,13 +29,7 @@
           <label style="margin-top:10px; margin-left:20px;">모델번호 <input style="margin-left:16px" type="text" name="enuriModelNo"></label>
           <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:17px" type="text" name="plNo"></label>
           <label style="margin-top:10px; margin-left:20px;">구매일자 <input style="margin-left:16px" type="date" name="startBuyDate"></label><input type="date" name="endBuyDate"></label>
-          <label style="margin-top:10px; margin-left:5px;">KAD/INDEX 선택
-            <select name="dateCriterion">
-              <option value="KAD">KAD</option>
-              <option value="INDEX">INDEX</option>
-            </select>
-          </label>
-          <label style="margin-top:10px; margin-left:8px;">KAD/INDEX 월선택 <input style="margin-left:16px" type="date" name="startDateByDateCriterion"></label><input type="date" name="endDateByDateCriterion"></label>
+          <label style="margin-top:10px; margin-left:258px;">INDEX DATE <input style="margin-left:16px" type="date" name="startIndexDate"></label><input type="date" name="endIndexDate"></label>
         </div>
       </div>
       <div class="col-2 mt-5 pt-3" style="border:1px solid black; float:left;">
@@ -39,7 +37,6 @@
         <select class="custom-select" name="sortTargetColumn" form="searchForm">
           <option value="">기본 정렬</option>
           <option value="PL_NO">PL_NO</option>
-          <option value="ENR_REP_SHOP_CODE">쇼핑몰코드</option>
           <option value="ENR_MODEL_NO">모델번호</option>
         </select>
         <div style="margin-top:13px;">집계열 선택</div>
@@ -52,10 +49,8 @@
         <div style="margin-top:13px;">집계 대상열 선택</div>
         <select class="custom-select" name="aggregationTargetColumn" form="searchForm">
           <option value=""></option>
-          <option value="USER_ID">유저아이디</option>
           <option value="ENR_MODEL_NO">ENR_MODEL_NO</option>
           <option value="PL_NO">PL_NO</option>
-          <option value="CHANNEL">채널</option>
         </select>
       </div>
       <input type="submit" value="검색" style="height:30px; margin-top:270px; margin-left:10px;">
@@ -91,16 +86,16 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
+      <tr th:each="searchResult : ${searchResultList}">
         <td>1</td>
-        <td>20210101</td>
-        <td>DF202012</td>
-        <td>9824858</td>
-        <td>제로콜라 355ml 24캔 1박스 안전포장</td>
-        <td>코카콜라 제로 캔: 콜라제로 2박스(+17500원)</td>
-        <td>6623324045</td>
-        <td>15</td>
-        <td>1</td>
+        <td th:text="${searchResult.buyDate}">20210101</td>
+        <td th:text="${searchResult.processingPeriodValue}">DF202012</td>
+        <td th:text="${searchResult.enuriModelNo}">9824858</td>
+        <td th:text="${searchResult.goodsName}">제로콜라 355ml 24캔 1박스 안전포장</td>
+        <td th:text="${searchResult.goodsOptionValue}">코카콜라 제로 캔: 콜라제로 2박스(+17500원)</td>
+        <td th:text="${searchResult.plNo}">6623324045</td>
+        <td th:text="${searchResult.smartDeliveryShoppingMallCode}">15</td>
+        <td th:text="${searchResult.adjustedBuyQuantity}">1</td>
       </tr>
       </tbody>
     </table>

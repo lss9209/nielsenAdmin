@@ -2,7 +2,7 @@ package com.enuri.nielsen.admin.controller;
 
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column;
-import com.enuri.nielsen.admin.domain.shoppingDiary.enums.DateCriterion;
+import com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode;
 import com.enuri.nielsen.admin.domain.shoppingDiary.formDto.SearchInputForm;
 import com.enuri.nielsen.admin.domain.shoppingDiary.viewDto.SearchResult;
 import com.enuri.nielsen.infra.MockMvcTest;
@@ -47,26 +47,24 @@ class SearchControllerTest {
         searchInputForm.setEnuriRepCateCode("11111");
         searchInputForm.setEnuriModelNo("");
         searchInputForm.setStartBuyDate(LocalDate.parse("2021-08-03"));
-        searchInputForm.setDateCriterion(DateCriterion.INDEX);
         searchInputForm.setSortTargetColumn(null);
         searchInputForm.setAggregation(Aggregation.COUNT);
         searchInputForm.setAggregationTargetColumn(Column.ENR_MODEL_NO);
+        searchInputForm.setSearchMode(SearchMode.AGGREGATION);
 
         mockMvc.perform(get("/admin/search")
-                        .param("selectedColumnList", selectedColumns)
-                        .param("goodsName", "상품명")
-                        .param("goodsOptionValue", "옵션명")
-                        .param("enuriRepCateCode", "11111")
-                        .param("enuriModelNo", "")
-                        .param("startBuyDate", "2021-08-03")
-                        .param("dateCriterion", "INDEX")
-                        .param("sortTargetColumn", "")
-                        .param("aggregation", "COUNT")
-                        .param("aggregationTargetColumn", "ENR_MODEL_NO")
-                )
-                .andExpect(model().attribute("searchInputForm", searchInputForm))
-                .andExpect(view().name("admin/search"))
-                .andExpect(status().isOk());
+                .param("selectedColumnList", selectedColumns)
+                .param("goodsName", "상품명")
+                .param("goodsOptionValue", "옵션명")
+                .param("enuriRepCateCode", "11111")
+                .param("enuriModelNo", "")
+                .param("startBuyDate", "2021-08-03")
+                .param("sortTargetColumn", "")
+                .param("aggregation", "COUNT")
+                .param("aggregationTargetColumn", "ENR_MODEL_NO")
+        )
+        .andExpect(model().attribute("searchInputForm", searchInputForm))
+        .andExpect(view().name("admin/search"))
+        .andExpect(status().isOk());
     }
-
 }

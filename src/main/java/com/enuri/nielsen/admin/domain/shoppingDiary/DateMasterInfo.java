@@ -13,4 +13,7 @@ public class DateMasterInfo {
 
     @Id @Column(name = "DATE")
     private String date;
+
+    @Column(name = "NS_MONTH_CODE")
+    private String indexDate;
 }

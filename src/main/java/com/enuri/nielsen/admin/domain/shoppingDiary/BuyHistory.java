@@ -36,4 +36,13 @@ public class BuyHistory {
 
     @Column(name = "ADJ_BUY_QNTY")
     private int adjustedBuyQuantity;
+
+    @Column(name = "DEL_CODE")
+    private char deleteCode;
+
+    @Column(name = "DRM_PAY_AMT")
+    private long payAmountExcludingShippingFee;
+
+    @Column(name = "ENR_REP_CATE_CODE")
+    private String enuriCateCode;
 }
