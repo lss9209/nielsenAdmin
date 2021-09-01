@@ -17,7 +17,7 @@ public class SearchResult {
 
     private String processingPeriodValue;
 
-    private int enuriModelNo;
+    private long enuriModelNo;
 
     private String goodsName;
 
@@ -25,14 +25,14 @@ public class SearchResult {
 
     private long plNo;
 
-    private int smartDeliveryShoppingMallCode;
+    private long smartDeliveryShoppingMallCode;
 
-    private int adjustedBuyQuantity;
+    private long adjustedBuyQuantity;
 
     private long aggregationResult;
 
-    public SearchResult(String buyDate, String processingPeriodValue, int enuriModelNo, String goodsName, String goodsOptionValue,
-                        long plNo, int smartDeliveryShoppingMallCode, int adjustedBuyQuantity) {
+    public SearchResult(String buyDate, String processingPeriodValue, long enuriModelNo, String goodsName, String goodsOptionValue,
+                        long plNo, long smartDeliveryShoppingMallCode, long adjustedBuyQuantity) {
         this.buyDate = buyDate;
         this.processingPeriodValue = processingPeriodValue;
         this.enuriModelNo = enuriModelNo;
@@ -41,5 +41,9 @@ public class SearchResult {
         this.plNo = plNo;
         this.smartDeliveryShoppingMallCode = smartDeliveryShoppingMallCode;
         this.adjustedBuyQuantity = adjustedBuyQuantity;
+    }
+
+    public SearchResult(long aggregationResult) {
+        this.aggregationResult = aggregationResult;
     }
 }

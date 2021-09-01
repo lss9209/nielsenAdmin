@@ -4,22 +4,30 @@ import com.enuri.nielsen.admin.domain.shoppingDiary.BuyHistory;
 import com.enuri.nielsen.admin.domain.shoppingDiary.QBuyHistory;
 import com.enuri.nielsen.admin.domain.shoppingDiary.QDateMasterInfo;
 import com.enuri.nielsen.admin.domain.shoppingDiary.QModelMasterInfo;
+import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode;
 import com.enuri.nielsen.admin.domain.shoppingDiary.formDto.SearchInputForm;
 import com.enuri.nielsen.admin.domain.shoppingDiary.viewDto.SearchResult;
+import com.enuri.nielsen.admin.exception.InvalidSumTargetException;
+import com.enuri.nielsen.admin.exception.NotDefinedAggregationException;
+import com.enuri.nielsen.admin.exception.NotDefinedAggregationTargetColumnException;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport implements BuyHistoryRepositoryExtension {
@@ -33,23 +41,29 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<SearchResult> search(SearchInputForm searchInputForm) {
-        List<SearchResult> searchResultList = new ArrayList<>();
+    public Page<SearchResult> search(SearchInputForm searchInputForm, Pageable pageable) {
+        Page<SearchResult> searchResultList = null;
         if(searchInputForm.getSearchMode() == SearchMode.NORMAL) {
-            searchResultList = searchWithNormalQuery(searchInputForm);
+            searchResultList = searchWithNormalQuery(searchInputForm, pageable);
         } else if(searchInputForm.getSearchMode() == SearchMode.AGGREGATION) {
-            searchResultList = searchWithAggregationQuery(searchInputForm);
+            try {
+                searchResultList = searchWithAggregationQuery(searchInputForm, pageable);
+            } catch (NotDefinedAggregationException notDefinedAggregationException) {
+                System.out.println("Not Defined Aggregation, Check The Related Enum Class [com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation]");
+            } catch (InvalidSumTargetException invalidSumTargetException) {
+                System.out.println("The Target Column Selcted Is Not Available For Sum Operation");
+            }
         }
         return searchResultList;
     }
 
-    private List<SearchResult> searchWithNormalQuery(SearchInputForm searchInputForm) {
+    private Page<SearchResult> searchWithNormalQuery(SearchInputForm searchInputForm, Pageable pageable) {
         JPQLQuery<SearchResult> query = from(buyHistory)
                 .select(Projections.constructor(SearchResult.class,
                         buyHistory.buyDate, buyHistory.processingPeriodValue, buyHistory.enuriModelNo,
                         buyHistory.goodsName, buyHistory.goodsOptionValue, buyHistory.plNo, buyHistory.smartDeliveryShoppingMallCode,
                         buyHistory.adjustedBuyQuantity))
-                .where(buyHistory.deleteCode.eq('0')
+                .where(buyHistory.deleteCode.eq("0")
                         .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
                         .and(buyHistory.buyDate.eq("20210701"))
                         .and(containsGoodsName(searchInputForm))
@@ -63,15 +77,34 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                 .join(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
                         .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
                 .join(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date))
-                .orderBy(getSortCriterion(searchInputForm))
-                .limit(20);
-        return query.fetch();
+                .orderBy(getSortCriterion(searchInputForm));
+        JPQLQuery<SearchResult> pageableQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<SearchResult> fetchResults = pageableQuery.fetchResults();
+        return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
     }
 
 
 
-    private List<SearchResult> searchWithAggregationQuery(SearchInputForm searchInputForm) {
-        return null;
+    private Page<SearchResult> searchWithAggregationQuery(SearchInputForm searchInputForm, Pageable pageable) {
+        JPQLQuery<SearchResult> query = from(buyHistory)
+                .select(Projections.constructor(SearchResult.class, getAggregationResult(searchInputForm)))
+                .where(buyHistory.deleteCode.eq("0")
+                        .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
+                        .and(buyHistory.buyDate.eq("20210701"))
+                        .and(containsGoodsName(searchInputForm))
+                        .and(eqGoodsOptionValue(searchInputForm))
+                        .and(eqEnuriRepCateCode(searchInputForm))
+                        .and(eqEnuriModelNo(searchInputForm))
+                        .and(eqPlNo(searchInputForm))
+                        .and(betweenBuyDate(searchInputForm))
+                        .and(betweenIndexDate(searchInputForm))
+                )
+                .join(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
+                        .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
+                .join(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date));
+        JPQLQuery<SearchResult> pageableQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<SearchResult> fetchResults = pageableQuery.fetchResults();
+        return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
     }
 
     private BooleanExpression containsGoodsName(SearchInputForm searchInputForm) {
@@ -95,7 +128,7 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
     private BooleanExpression eqEnuriModelNo(SearchInputForm searchInputForm) {
         String enuriModelNo = searchInputForm.getEnuriModelNo();
         if(enuriModelNo == null || Strings.isEmpty(enuriModelNo)) return null;
-        return buyHistory.enuriModelNo.eq(Integer.parseInt(enuriModelNo.trim()));
+        return buyHistory.enuriModelNo.eq(Long.parseLong(enuriModelNo.trim()));
     }
 
     private BooleanExpression eqPlNo(SearchInputForm searchInputForm) {
@@ -129,7 +162,43 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
         } else return buyHistory.buyHistoryId.integrationBuyNo.asc();
     }
 
-    private boolean allColumnsChecked(SearchInputForm searchInputForm) {
-        return searchInputForm.getSelectedColumnList().isEmpty();
+    private NumberExpression getAggregationResult(SearchInputForm searchInputForm) throws NotDefinedAggregationException, InvalidSumTargetException {
+
+        Path aggregationTargetColumn = null;
+        try {
+            aggregationTargetColumn = getAggregationTargetColumn(searchInputForm);
+        } catch (NotDefinedAggregationTargetColumnException notDefinedAggregationTargetColumnException) {
+            System.out.println("Not Defined AggregationTargetColumn");
+        }
+
+        if(searchInputForm.getAggregation().equals(Aggregation.SUM)) {
+            if(aggregationTargetColumn instanceof NumberPath) {
+                return ((NumberPath) aggregationTargetColumn).sum();
+            }else if(aggregationTargetColumn instanceof StringPath) {
+                throw new InvalidSumTargetException();
+            }
+        }else if(searchInputForm.getAggregation().equals(Aggregation.COUNT)) {
+            if(aggregationTargetColumn instanceof NumberPath) {
+                return ((NumberPath) aggregationTargetColumn).count();
+            } else if(aggregationTargetColumn instanceof StringPath) {
+                return ((StringPath) aggregationTargetColumn).count();
+            }
+        }else if(searchInputForm.getAggregation().equals(Aggregation.COUNT_DISTINCT)) {
+            if(aggregationTargetColumn instanceof NumberPath) {
+                return ((NumberPath) aggregationTargetColumn).countDistinct();
+            } else if(aggregationTargetColumn instanceof StringPath) {
+                return ((StringPath) aggregationTargetColumn).countDistinct();
+            }
+        }
+        throw new NotDefinedAggregationException();
+    }
+
+    private Path getAggregationTargetColumn(SearchInputForm searchInputForm) throws NotDefinedAggregationTargetColumnException {
+        if(searchInputForm.getAggregationTargetColumn() == Column.ENR_MODEL_NO) {
+            return buyHistory.enuriModelNo;
+        } else if(searchInputForm.getAggregationTargetColumn() == Column.PL_NO) {
+            return buyHistory.plNo;
+        }
+        throw new NotDefinedAggregationTargetColumnException();
     }
 }

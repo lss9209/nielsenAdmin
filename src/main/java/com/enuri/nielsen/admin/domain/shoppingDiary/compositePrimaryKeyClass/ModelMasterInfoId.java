@@ -17,5 +17,5 @@ public class ModelMasterInfoId implements Serializable {
     private String processingPeriodValue;
 
     @Column(name = "ENR_MODEL_NO", nullable = false)
-    private int enuriModelNo;
+    private long enuriModelNo;
 }

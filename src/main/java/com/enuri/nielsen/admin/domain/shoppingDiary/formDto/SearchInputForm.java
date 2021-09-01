@@ -17,7 +17,7 @@ public class SearchInputForm {
 
     private SearchMode searchMode;
 
-    private Set<Column> selectedColumnList = new HashSet<>();
+    private Set<Column> selectedColumnSet = new HashSet<>();
 
     private String goodsName;
 
@@ -44,7 +44,7 @@ public class SearchInputForm {
     private Column aggregationTargetColumn;
 
     public String toString() {
-        return "selectedColumnList : " + selectedColumnList + ", goodsName : " + goodsName + ", goodsOptionValue : " + goodsOptionValue +  ", enuriRepCateCode : " + enuriRepCateCode + ", enuriModelNo : " + enuriModelNo
+        return "selectedColumnSet : " + selectedColumnSet + ", goodsName : " + goodsName + ", goodsOptionValue : " + goodsOptionValue +  ", enuriRepCateCode : " + enuriRepCateCode + ", enuriModelNo : " + enuriModelNo
                 + ", plNo : " + plNo + ", startBuyDate : " + startBuyDate + ", endBuyDate : " + endBuyDate + ", startIndexDate : " + startIndexDate
                 + ", endIndexDate : " + endIndexDate + ", sortTargetColumn : " + sortTargetColumn + ", aggregation : " + aggregation + ", aggregationTargetColumn : " + aggregationTargetColumn;
     }

@@ -7,6 +7,8 @@ import com.enuri.nielsen.admin.domain.shoppingDiary.viewDto.SearchResult;
 import com.enuri.nielsen.admin.repository.shoppingDiary.BuyHistoryRepository;
 import com.enuri.nielsen.admin.service.shoppingDiary.BuyHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +30,9 @@ public class SearchController {
     }
 
     @GetMapping("/admin/search")
-    public String search(@Valid SearchInputForm searchInputForm, Model model, Error error) {
+    public String search(@Valid SearchInputForm searchInputForm, Model model, Error error, Pageable pageable) {
         System.out.println(searchInputForm.toString());
-        List<SearchResult> searchResultList = buyHistoryService.search(searchInputForm);
+        Page<SearchResult> searchResultList = buyHistoryService.search(searchInputForm, pageable);
         model.addAttribute("searchInputForm", searchInputForm);
         model.addAttribute("searchResultList", searchResultList);
         return "admin/search";

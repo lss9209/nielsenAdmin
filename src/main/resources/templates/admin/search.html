@@ -10,14 +10,14 @@
       <div class="col-2 mt-5 pt-3" style="border:1px solid black">
         <div style="margin-bottom:5px;">조회할 기준열 선택</div>
         <div style="border:1px solid black; padding-left:5px;">
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="ENR_MODEL_NO">모델번호</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="PL_NO">PL_NO</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="BUY_DATE">구매일자</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="GOODS_NAME">상품명</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="GOODS_OPTN_VLU">상품옵션값</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="PROC_PRD_VLU">처리기간일자</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="SMTD_SHOP_CODE">스마트택배쇼핑몰코드</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnList" value="ADJ_BUY_QNTY">보정구매수량</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ENR_MODEL_NO">모델번호</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PL_NO">PL_NO</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="BUY_DATE">구매일자</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_NAME">상품명</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_OPTN_VLU">상품옵션값</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PROC_PRD_VLU">처리기간일자</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="SMTD_SHOP_CODE">스마트택배쇼핑몰코드</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ADJ_BUY_QNTY">보정구매수량</label>
         </div>
       </div>
       <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px;">
@@ -59,62 +59,79 @@
     </div>
   </form>
 
-  <div class="row" style="width:1800px; max-height:700px; overflow-y:scroll;">
-    <table class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
+  <div class="row" style="width:1800px; max-height:620px; overflow-y:scroll;">
+    <table th:if="${searchInputForm.searchMode == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode).NORMAL}" class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
       <colgroup>
         <col span="1" style="width:4%">
-        <col span="1" style="width:6%">
-        <col span="1" style="width:10%">
-        <col span="1" style="width:10%">
-        <col span="1" style="width:18%">
-        <col span="1" style="width:22%">
-        <col span="1" style="width:10%">
-        <col span="1" style="width:10%">
-        <col span="1" style="width:10%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).BUY_DATE)}" span="1" style="width:6%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PROC_PRD_VLU)}" span="1" style="width:10%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO)}" span="1" style="width:10%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_NAME)}" span="1" style="width:18%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_OPTN_VLU)}" span="1" style="width:22%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO)}" span="1" style="width:10%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).SMTD_SHOP_CODE)}" span="1" style="width:10%">
+        <col th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ADJ_BUY_QNTY)}" span="1" style="width:10%">
       </colgroup>
       <thead>
       <tr>
         <th>No</th>
-        <th>BUY_DATE</th>
-        <th>PROC_PRD_VLU</th>
-        <th>ENR_MODEL_NO</th>
-        <th>GOODS_NAME</th>
-        <th>GOODS_OPTN_VLU</th>
-        <th>PL_NO</th>
-        <th>SMTD_SHOP_CODE</th>
-        <th>ADJ_BUY_QNTY</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).BUY_DATE)}">BUY_DATE</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PROC_PRD_VLU)}" >PROC_PRD_VLU</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO)}" >ENR_MODEL_NO</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_NAME)}" >GOODS_NAME</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_OPTN_VLU)}" >GOODS_OPTN_VLU</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO)}" >PL_NO</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).SMTD_SHOP_CODE)}" >SMTD_SHOP_CODE</th>
+        <th th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ADJ_BUY_QNTY)}" >ADJ_BUY_QNTY</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="searchResult : ${searchResultList}">
+      <tr th:each="searchResult : ${searchResultList.getContent()}">
         <td>1</td>
-        <td th:text="${searchResult.buyDate}">20210101</td>
-        <td th:text="${searchResult.processingPeriodValue}">DF202012</td>
-        <td th:text="${searchResult.enuriModelNo}">9824858</td>
-        <td th:text="${searchResult.goodsName}">제로콜라 355ml 24캔 1박스 안전포장</td>
-        <td th:text="${searchResult.goodsOptionValue}">코카콜라 제로 캔: 콜라제로 2박스(+17500원)</td>
-        <td th:text="${searchResult.plNo}">6623324045</td>
-        <td th:text="${searchResult.smartDeliveryShoppingMallCode}">15</td>
-        <td th:text="${searchResult.adjustedBuyQuantity}">1</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).BUY_DATE)}" th:text="${searchResult.buyDate}">20210101</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PROC_PRD_VLU)}" th:text="${searchResult.processingPeriodValue}">DF202012</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO)}" th:text="${searchResult.enuriModelNo}">9824858</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_NAME)}" th:text="${searchResult.goodsName}">제로콜라 355ml 24캔 1박스 안전포장</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_OPTN_VLU)}" th:text="${searchResult.goodsOptionValue}">코카콜라 제로 캔: 콜라제로 2박스(+17500원)</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO)}" th:text="${searchResult.plNo}">6623324045</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).SMTD_SHOP_CODE)}" th:text="${searchResult.smartDeliveryShoppingMallCode}">15</td>
+        <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ADJ_BUY_QNTY)}" th:text="${searchResult.adjustedBuyQuantity}">1</td>
+      </tr>
+      </tbody>
+    </table>
+    <table th:if="${searchInputForm.searchMode == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode).AGGREGATION}" class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
+      <colgroup>
+        <col span="1" style="width:100%">
+      </colgroup>
+      <thead>
+      <tr>
+        <th th:text="${searchInputForm.aggregation + '(' + searchInputForm.aggregationTargetColumn + ')'}">COUNT_DISTINCT(ENR_MODEL_NO)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="searchResult : ${searchResultList.getContent()}">
+        <td th:text="${searchResult.aggregationResult}">562</td>
       </tr>
       </tbody>
     </table>
   </div>
-  <div class="row">
+  <div th:if="${searchInputForm.searchMode == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode).NORMAL}" class="row" style="margin-top:10px; margin-left:700px;">
     <nav>
       <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" tabindex="-1" aria-disabled="true">
-            Previous
-          </a>
+        <li class="page-item" th:classappend="${searchResultList.getNumber()/5*5 - 1 <= 0}? disabled">
+          <a class="page-link" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)},
+                                        previousPage=${searchResultList.getNumber()/5*5 - 1}"
+             th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', previousPage).toUriString()}">Next</a>
         </li>
-        <li class="page-item">
-          <a class="page-link" href="#">1</a>
+        <li class="page-item" th:if="${searchResultList.getTotalPages() > 0}" th:classappend="${i == searchResultList.getNumber()}? active"
+            th:each="i: ${#numbers.sequence(searchResultList.getNumber()/5*5, (searchResultList.getNumber()/5*5 + 4 < searchResultList.getTotalPages() ? searchResultList.getNumber()/5*5 + 4 : searchResultList.getTotalPages() - 1))}">
+          <a class="page-link" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+             th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', i).toUriString()}" th:text="${i + 1}">1</a>
         </li>
-        <li class="page-item">
-          <a class="page-link">
-            Next
-          </a>
+        <li class="page-item" th:classappend="${searchResultList.getNumber()/5*5 + 5 >= searchResultList.getTotalPages()}? disabled">
+          <a class="page-link" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)},
+                                        nextPage=${searchResultList.getNumber()/5*5 + 5}"
+             th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', nextPage).toUriString()}">Next</a>
         </li>
       </ul>
     </nav>

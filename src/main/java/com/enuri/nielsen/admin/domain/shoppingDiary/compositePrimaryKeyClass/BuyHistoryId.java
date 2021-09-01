@@ -18,5 +18,5 @@ public class BuyHistoryId implements Serializable {
     private long integrationBuyNo;
 
     @Column(name = "SRC_TBL_ID", nullable = false)
-    private int sourceTableId;
+    private long sourceTableId;
 }

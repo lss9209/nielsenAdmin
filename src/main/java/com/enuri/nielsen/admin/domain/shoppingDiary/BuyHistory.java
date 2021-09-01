@@ -20,7 +20,7 @@ public class BuyHistory {
     private String processingPeriodValue;
 
     @Column(name = "ENR_MODEL_NO")
-    private int enuriModelNo;
+    private long enuriModelNo;
 
     @Column(name = "GOODS_NAME")
     private String goodsName;
@@ -32,13 +32,13 @@ public class BuyHistory {
     private long plNo;
 
     @Column(name = "SMTD_SHOP_CODE")
-    private int smartDeliveryShoppingMallCode;
+    private long smartDeliveryShoppingMallCode;
 
     @Column(name = "ADJ_BUY_QNTY")
-    private int adjustedBuyQuantity;
+    private long adjustedBuyQuantity;
 
     @Column(name = "DEL_CODE")
-    private char deleteCode;
+    private String deleteCode;
 
     @Column(name = "DRM_PAY_AMT")
     private long payAmountExcludingShippingFee;
