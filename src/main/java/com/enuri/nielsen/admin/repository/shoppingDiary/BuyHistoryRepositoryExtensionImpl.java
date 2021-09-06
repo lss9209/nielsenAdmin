@@ -1,17 +1,14 @@
 package com.enuri.nielsen.admin.repository.shoppingDiary;
 
-import com.enuri.nielsen.admin.domain.shoppingDiary.BuyHistory;
-import com.enuri.nielsen.admin.domain.shoppingDiary.QBuyHistory;
-import com.enuri.nielsen.admin.domain.shoppingDiary.QDateMasterInfo;
-import com.enuri.nielsen.admin.domain.shoppingDiary.QModelMasterInfo;
+import com.enuri.nielsen.admin.domain.shoppingDiary.*;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode;
 import com.enuri.nielsen.admin.domain.shoppingDiary.formDto.SearchInputForm;
 import com.enuri.nielsen.admin.domain.shoppingDiary.viewDto.SearchResult;
-import com.enuri.nielsen.admin.exception.InvalidSumTargetException;
-import com.enuri.nielsen.admin.exception.NotDefinedAggregationException;
-import com.enuri.nielsen.admin.exception.NotDefinedAggregationTargetColumnException;
+import com.enuri.nielsen.admin.exception.shoppingDiary.InvalidSumTargetException;
+import com.enuri.nielsen.admin.exception.shoppingDiary.NotDefinedAggregationException;
+import com.enuri.nielsen.admin.exception.shoppingDiary.NotDefinedAggregationTargetColumnException;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,7 +16,6 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,8 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport implements BuyHistoryRepositoryExtension {
 
@@ -55,6 +49,13 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
             }
         }
         return searchResultList;
+    }
+
+    @Override
+    public String getIndexDateWithGivenNormalDate(String normalDate) {
+        JPQLQuery<String> query = from(dateMasterInfo).select(dateMasterInfo.indexDate).where(dateMasterInfo.date.eq(normalDate));
+        String switchedIndexDate = query.fetchOne();
+        return switchedIndexDate;
     }
 
     private Page<SearchResult> searchWithNormalQuery(SearchInputForm searchInputForm, Pageable pageable) {

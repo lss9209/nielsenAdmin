@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface BuyHistoryRepositoryExtension {
     Page<SearchResult> search(SearchInputForm searchInputForm, Pageable pageable);
+
+    String getIndexDateWithGivenNormalDate(String normalDate);
 }

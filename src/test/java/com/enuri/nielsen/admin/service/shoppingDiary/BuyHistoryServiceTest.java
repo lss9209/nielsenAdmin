@@ -4,6 +4,7 @@ import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column;
 import com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode;
 import com.enuri.nielsen.admin.domain.shoppingDiary.formDto.SearchInputForm;
+import com.enuri.nielsen.admin.exception.shoppingDiary.NormalDateOutOfBoundForConvertingToIndexDateException;
 import com.enuri.nielsen.admin.repository.shoppingDiary.BuyHistoryRepository;
 import com.enuri.nielsen.infra.MockMvcTest;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,5 +73,20 @@ class BuyHistoryServiceTest {
         buyHistoryService.search(searchInputForm, Pageable.ofSize(20));
 
         assertTrue(searchInputForm.getSelectedColumnSet().size() == Column.values().length);
+    }
+
+    @DisplayName("NormalDate -> IndexDate 서비스로직 테스트")
+    @Test
+    void checkNormalDateToIndexDateServiceLogic() throws Exception {
+
+        LocalDate switchedStartIndexDate = buyHistoryService.getIndexDateWithGivenNormalDate("20210921", "startIndexDate");
+        LocalDate switchedEndIndexDate = buyHistoryService.getIndexDateWithGivenNormalDate("20210921", "endIndexDate");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        assertTrue(switchedStartIndexDate.equals(LocalDate.parse("2021-09-01", formatter)));
+        assertTrue(switchedEndIndexDate.equals(LocalDate.parse("2021-09-30", formatter)));
+        assertThrows(NormalDateOutOfBoundForConvertingToIndexDateException.class, () -> {
+            buyHistoryService.getIndexDateWithGivenNormalDate("20260921", "endIndexDate");
+        });
     }
 }
