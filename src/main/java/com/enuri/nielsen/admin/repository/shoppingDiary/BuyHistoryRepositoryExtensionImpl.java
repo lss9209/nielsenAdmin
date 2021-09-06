@@ -141,16 +141,35 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
     private BooleanExpression betweenBuyDate(SearchInputForm searchInputForm) {
         LocalDate startBuyDate = searchInputForm.getStartBuyDate();
         LocalDate endBuyDate = searchInputForm.getEndBuyDate();
+
         if(startBuyDate == null || endBuyDate == null) return null;
-        System.out.println("시작날짜 문자열 : " + startBuyDate.toString() + "끝날짜 문자열 : " + endBuyDate.toString());
-        return buyHistory.buyDate.between(startBuyDate.toString(), endBuyDate.toString());
+        String startBuyDateStr = convertToNormalDateStrFormat(startBuyDate);
+        String endBuyDateStr = convertToNormalDateStrFormat(endBuyDate);
+
+        return buyHistory.buyDate.between(startBuyDateStr, endBuyDateStr);
+    }
+
+    private String convertToNormalDateStrFormat(LocalDate normalDate) {
+        String normalDateStrBuilder = null;
+        normalDateStrBuilder = normalDate.toString().replace("-", "");
+        return normalDateStrBuilder;
     }
 
     private BooleanExpression betweenIndexDate(SearchInputForm searchInputForm) {
         LocalDate startIndexDate = searchInputForm.getStartIndexDate();
         LocalDate endIndexDate = searchInputForm.getEndIndexDate();
+
         if(startIndexDate == null || endIndexDate == null) return null;
-        return dateMasterInfo.indexDate.between(startIndexDate.toString(), endIndexDate.toString());
+        StringBuilder startIndexDateStrBuilder = convertToNielSenIndexDateStrFormat(startIndexDate);
+        StringBuilder endIndexDateStrBuilder = convertToNielSenIndexDateStrFormat(endIndexDate);
+
+        return dateMasterInfo.indexDate.between(startIndexDateStrBuilder.toString(), endIndexDateStrBuilder.toString());
+    }
+
+    private StringBuilder convertToNielSenIndexDateStrFormat(LocalDate indexDate) {
+        StringBuilder indexDateStrBuilder = new StringBuilder();
+        indexDateStrBuilder.append(indexDate.toString().substring(0,4)).append("14").append(indexDate.toString().substring(5,7));
+        return indexDateStrBuilder;
     }
 
     private OrderSpecifier getSortCriterion(SearchInputForm searchInputForm) {
