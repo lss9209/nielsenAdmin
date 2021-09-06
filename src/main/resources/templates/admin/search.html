@@ -56,7 +56,7 @@
           <option value="PL_NO">PL_NO</option>
         </select>
       </div>
-      <input type="submit" value="검색" style="height:30px; margin-top:270px; margin-left:10px;">
+      <input type="submit" value="검색" style="height:30px; margin-top:270px; margin-left:10px; float:left;">
       <div class="col-4 mt-5 pt-3">
       </div>
     </div>
@@ -132,7 +132,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="searchResult : ${searchResultList.getContent()}">
+        <tr th:if="${searchResultList.getContent().size() > 0}" th:each="searchResult : ${searchResultList.getContent()}">
           <td>1</td>
           <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).BUY_DATE)}" th:text="${searchResult.buyDate}">20210101</td>
           <td th:if="${searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PROC_PRD_VLU)}" th:text="${searchResult.processingPeriodValue}">DF202012</td>
@@ -145,6 +145,7 @@
         </tr>
         </tbody>
       </table>
+      <span th:if="${searchResultList.getContent().size() == 0}">조회된 결과가 없습니다.</span>
       <table th:if="${searchInputForm.searchMode == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode).AGGREGATION}" class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
         <colgroup>
           <col span="1" style="width:100%">
@@ -167,7 +168,7 @@
           <li class="page-item" th:classappend="${searchResultList.getNumber()/5*5 - 1 <= 0}? disabled">
             <a class="page-link" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)},
                                           previousPage=${searchResultList.getNumber()/5*5 - 1}"
-               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', previousPage).toUriString()}">Next</a>
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', previousPage).toUriString()}">Previous</a>
           </li>
           <li class="page-item" th:if="${searchResultList.getTotalPages() > 0}" th:classappend="${i == searchResultList.getNumber()}? active"
               th:each="i: ${#numbers.sequence(searchResultList.getNumber()/5*5, (searchResultList.getNumber()/5*5 + 4 < searchResultList.getTotalPages() ? searchResultList.getNumber()/5*5 + 4 : searchResultList.getTotalPages() - 1))}">
@@ -200,5 +201,6 @@
       });
   }
 </script>
+<script th:replace="fragments.html :: loadingWithLoadingImage"></script>
 </body>
 </html>

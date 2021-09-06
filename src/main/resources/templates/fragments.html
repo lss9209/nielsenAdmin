@@ -10,4 +10,59 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     </head>
 
+    <!-- 로딩중 이미지 구현 -->
+    <script th:fragment="loadingWithLoadingImage">
+        function LoadingWithMask() {
+            //화면의 높이와 너비를 구합니다.
+            var maskHeight = $(document).height();
+            var maskWidth  = window.document.body.clientWidth;
+            var loadingImageLeftPos = screen.width/2;
+            var loadingImageTopPos = screen.height/2;
+
+            //화면에 출력할 마스크를 설정해줍니다.
+            var mask       ="<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;'></div>";
+            var loadingImg ='';
+
+            loadingImg +="<div id='loadingImg' style='z-index:9001;'>";
+            loadingImg +="  <img src='http://img.enuri.info/images/home/enuri_loader.gif' style='display: block; margin: 0px auto;'/>";
+            loadingImg +="  <button id='cancelQueryBtn' type='button' style='margin-left:32px';>취소</button>";
+            loadingImg +="</div>";
+
+            //화면에 레이어 추가
+            $('body')
+                .append(mask)
+                .append(loadingImg)
+
+            //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채웁니다.
+            $('#mask').css({
+                    'width' : maskWidth
+                    ,'height' : maskHeight
+                    ,'opacity' :'0.1'
+            });
+
+            $('#loadingImg').css({
+                    'left' : loadingImageLeftPos - 100
+                    ,'top' : loadingImageTopPos - 100
+                    ,'position': 'fixed'
+            });
+
+            //마스크 표시
+            $('#mask').show();
+
+            //로딩중 이미지 표시
+            $('#loadingImg').show();
+
+            $("#cancelQueryBtn").click(function(){
+                window.location = '/';
+            });
+        }
+
+         $("form").submit(function(){
+              LoadingWithMask();
+         });
+         $(".page-link").click(function(){
+              LoadingWithMask();
+         });
+    </script>
+
 </html>

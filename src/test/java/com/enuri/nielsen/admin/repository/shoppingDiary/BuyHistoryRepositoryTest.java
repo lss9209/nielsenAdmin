@@ -100,7 +100,6 @@ class BuyHistoryRepositoryTest {
         int contentSizeWhenSearchedByIndexDateConvertedFromAboveNormalDateCriterion
                 = searchResultPageByIndexDateConvertedFromAboveNormalDateCriterion.getContent().size();
 
-        System.out.println("size = " + contentSizeWhenSearchedByNormalDate);
         assertEquals(contentSizeWhenSearchedByNormalDate, contentSizeWhenSearchedByIndexDateConvertedFromAboveNormalDateCriterion);
     }
 
