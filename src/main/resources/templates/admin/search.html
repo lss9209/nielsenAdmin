@@ -4,65 +4,65 @@
 <div th:replace="fragments.html :: head"></div>
 <title>닐슨 관리자페이지</title>
 <body>
-<div class="container" style="margin-left: 50px;">
+<div class="container" style="margin-left: 50px; font-size:12px;">
   <form th:action="@{/admin/search}" method="get" id="searchForm">
-    <div class="row" style="width:1800px; height:320px;">
-      <div class="col-2 mt-5 pt-3" style="border:1px solid black">
-        <div style="margin-bottom:5px;">조회할 기준열 선택</div>
-        <div style="border:1px solid black; padding-left:5px;">
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ENR_MODEL_NO">모델번호</label>
+    <div class="row" style="width:1800px; height:250px;">
+      <div class="col-2 mt-5 pt-3" style="border:1px solid black; height: 188px;">
+        <div style="margin-bottom:5px;"><b>조회할 기준열 선택</b></div>
+        <div style="border:1px solid black; padding-left:5px; padding-top:5px;">
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ENR_MODEL_NO">ENR_MODEL_NO</label>
           <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PL_NO">PL_NO</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="BUY_DATE">구매일자</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_NAME">상품명</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_OPTN_VLU">상품옵션값</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PROC_PRD_VLU">처리기간일자</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="SMTD_SHOP_CODE">스마트택배쇼핑몰코드</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ADJ_BUY_QNTY">보정구매수량</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="BUY_DATE">BUY_DATE</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_NAME">GOODS_NAME</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_OPTN_VLU">GOODS_OPTN_VLU</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PROC_PRD_VLU">PROC_PRD_VLU</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="SMTD_SHOP_CODE">SMTD_SHOP_CODE</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ADJ_BUY_QNTY">ADJ_BUY_QNTY</label>
         </div>
       </div>
-      <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px;">
-        <div style="margin-bottom:5px;">조건 선택</div>
+      <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px; height: 188px;">
+        <div style="margin-bottom:5px;"><b>조건 선택</b></div>
         <div style="border:1px solid black">
-          <label style="margin-top:10px; margin-left:5px;">상품명 <input style="margin-left:16px" type="text" name="goodsName"></label>
-          <label style="margin-top:10px; margin-left:20px;">상품옵션명 <input type="text" name="goodsOptionValue"></label>
+          <label style="margin-top:10px; margin-left:5px;">상품명 <input style="margin-left:12px" type="text" name="goodsName"></label>
+          <label style="margin-top:10px; margin-left:5px;">상품옵션명 <input type="text" name="goodsOptionValue"></label>
           <label style="margin-top:10px; margin-left:5px;">카테코드 <input type="text" name="enuriRepCateCode"></label>
-          <label style="margin-top:10px; margin-left:20px;">모델번호 <input style="margin-left:16px" type="text" name="enuriModelNo"></label>
-          <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:17px" type="text" name="plNo"></label>
-          <label style="margin-top:10px; margin-left:20px;">구매일자 <input style="margin-left:16px" type="date" name="startBuyDate"><input type="date" name="endBuyDate"></label>
-          <label style="margin-top:10px; margin-left:258px;">INDEX DATE
-            <input id="startIndexDate" style="margin-left:16px" type="date" name="startIndexDate" onchange="switchNormalDateToIndexDate('startIndexDate')">
+          <label style="margin-top:10px; margin-left:5px;">모델번호 <input type="text" name="enuriModelNo"></label>
+          <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:24px" type="text" name="plNo"></label>
+          <label style="margin-top:10px; margin-left:5px;">구매일자 <input type="date" name="startBuyDate"><input type="date" name="endBuyDate"></label>
+          <label style="margin-top:10px; margin-left:25px;">INDEX
+            <input id="startIndexDate" type="date" name="startIndexDate" onchange="switchNormalDateToIndexDate('startIndexDate')">
             <input id="endIndexDate" type="date" name="endIndexDate" onchange="switchNormalDateToIndexDate('endIndexDate')">
           </label>
         </div>
       </div>
-      <div class="col-2 mt-5 pt-3" style="border:1px solid black; float:left;">
-        <div>정렬 선택</div>
+      <div class="col-2 mt-5 pt-3" style="border:1px solid black; float:left; height: 188px;">
+        <div><b>정렬 선택</b></div>
         <select class="custom-select" name="sortTargetColumn" form="searchForm">
           <option value="">기본 정렬</option>
           <option value="PL_NO">PL_NO</option>
           <option value="ENR_MODEL_NO">모델번호</option>
         </select>
-        <div style="margin-top:13px;">집계열 선택</div>
-        <select class="custom-select" name="aggregation" form="searchForm">
+        <div style="margin-top:13px;"><b>집계방식 선택</b></div>
+        <select class="custom-select" name="aggregation" form="searchForm" style="width:131px; float:left;">
           <option value="">사용 안함</option>
           <option value="SUM">SUM</option>
           <option value="COUNT">COUNT</option>
           <option value="COUNT_DISTINCT">COUNT(DISTINCT)</option>
         </select>
-        <div style="margin-top:13px;">집계 대상열 선택</div>
-        <select class="custom-select" name="aggregationTargetColumn" form="searchForm">
+        <div style="margin-top:-18px; margin-left:135px;"><b>집계 대상열 선택</b></div>
+        <select class="custom-select" name="aggregationTargetColumn" form="searchForm" style="width:131px; margin-left:5px;">
           <option value=""></option>
           <option value="ENR_MODEL_NO">ENR_MODEL_NO</option>
           <option value="PL_NO">PL_NO</option>
         </select>
       </div>
-      <input type="submit" value="검색" style="height:30px; margin-top:270px; margin-left:10px; float:left;">
+      <input type="submit" value="검색" style="height:30px; margin-top:206px; margin-left:10px; float:left;">
       <div class="col-4 mt-5 pt-3">
       </div>
     </div>
   </form>
   <div th:if="${searchInputForm == null}">
-    <div class="row" style="width:1800px; max-height:620px; overflow-y:scroll;">
+    <div class="row" style="width:1800px; max-height:700px; overflow-y:scroll;">
       <table class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
         <colgroup>
           <col span="1" style="width:4%">
@@ -105,7 +105,7 @@
     </div>
   </div>
   <div th:if="${searchInputForm != null}">
-    <div class="row" style="width:1800px; max-height:620px; overflow-y:scroll;">
+    <div class="row" style="width:1800px; max-height:700px; overflow-y:scroll;">
       <table th:if="${searchInputForm.searchMode == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.SearchMode).NORMAL}" class="table table-striped" style="width:100%; table-layout:fixed; word-break:break-all; border:1px solid black;">
         <colgroup>
           <col span="1" style="width:4%">

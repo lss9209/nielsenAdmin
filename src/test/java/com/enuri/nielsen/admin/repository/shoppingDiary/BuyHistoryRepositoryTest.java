@@ -32,7 +32,7 @@ class BuyHistoryRepositoryTest {
     LocalDate startBuyDate = LocalDate.parse("2021-07-01", formatter);
     LocalDate endBuyDate = LocalDate.parse("2021-07-01", formatter);
 
-    /*@DisplayName("NORMAL 쿼리로 서치했을 때 정렬/페이징이 잘 동작하는지 여부")
+    @DisplayName("NORMAL 쿼리로 서치했을 때 정렬/페이징이 잘 동작하는지 여부")
     @Test
     void checkNormalQuerySortAndPaging() throws Exception {
 
@@ -44,8 +44,8 @@ class BuyHistoryRepositoryTest {
 
         Page<SearchResult> searchResultPage = buyHistoryRepository.search(searchInputForm, PageRequest.of(4, 20));
 
-        assertEquals(searchResultPage.getContent().get(5).getGoodsName(), "[일동] 후디스 프리미엄 산양분유 1단계(태어나서 6개월까지조제분유) 800g");
-    }*/
+        assertEquals("설민석의 고사성어 대격돌 2", searchResultPage.getContent().get(5).getGoodsName());
+    }
 
     @DisplayName("NORMAL 쿼리로 서치했을 때 조건검색이 잘 동작하는지 여부")
     @Test
@@ -59,7 +59,7 @@ class BuyHistoryRepositoryTest {
 
         Page<SearchResult> searchResultPage = buyHistoryRepository.search(searchInputForm, PageRequest.of(0, 20));
 
-        assertEquals(searchResultPage.getContent().get(2).getGoodsName(), "피코크 유기농 시원한찬물 제주녹차 50입");
+        assertEquals("피코크 유기농 시원한찬물 제주녹차 50입", searchResultPage.getContent().get(2).getGoodsName());
     }
 
     @DisplayName("AGGREGATION 쿼리로 서치했을 때 집계검색이 잘 동작하는지 여부")
@@ -75,7 +75,7 @@ class BuyHistoryRepositoryTest {
 
         Page<SearchResult> searchResultPage = buyHistoryRepository.search(searchInputForm, PageRequest.of(0, 20));
 
-        assertEquals(searchResultPage.getContent().get(0).getAggregationResult(), 24226L);
+        assertEquals(24239L, searchResultPage.getContent().get(0).getAggregationResult());
     }
 
     @DisplayName("날짜검색(Normal, Index) 정확성 여부")
