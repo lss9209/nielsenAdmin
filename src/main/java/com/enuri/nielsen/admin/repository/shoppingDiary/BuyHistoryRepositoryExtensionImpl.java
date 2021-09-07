@@ -17,9 +17,7 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDate;
@@ -75,16 +73,14 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                         .and(betweenBuyDate(searchInputForm))
                         .and(betweenIndexDate(searchInputForm))
                 )
-                .join(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
+                .leftJoin(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
                         .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
-                .join(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date))
-                .orderBy(getSortCriterion(searchInputForm));
+                .leftJoin(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date));
+        pageable = setSortCriterionToPageable(pageable, searchInputForm);
         JPQLQuery<SearchResult> pageableQuery = getQuerydsl().applyPagination(pageable, query);
         QueryResults<SearchResult> fetchResults = pageableQuery.fetchResults();
         return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
     }
-
-
 
     private Page<SearchResult> searchWithAggregationQuery(SearchInputForm searchInputForm, Pageable pageable) {
         JPQLQuery<SearchResult> query = from(buyHistory)
@@ -100,9 +96,9 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                         .and(betweenBuyDate(searchInputForm))
                         .and(betweenIndexDate(searchInputForm))
                 )
-                .join(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
+                .leftJoin(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
                         .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
-                .join(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date));
+                .leftJoin(dateMasterInfo).on(buyHistory.buyDate.eq(dateMasterInfo.date));
         JPQLQuery<SearchResult> pageableQuery = getQuerydsl().applyPagination(pageable, query);
         QueryResults<SearchResult> fetchResults = pageableQuery.fetchResults();
         return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
@@ -172,14 +168,13 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
         return indexDateStrBuilder;
     }
 
-    private OrderSpecifier getSortCriterion(SearchInputForm searchInputForm) {
-        if(searchInputForm.getSortTargetColumn() == null) {
-            return buyHistory.buyHistoryId.integrationBuyNo.asc();
-        } else if(searchInputForm.getSortTargetColumn() == Column.ENR_MODEL_NO) {
-            return buyHistory.enuriModelNo.asc();
+    private Pageable setSortCriterionToPageable(Pageable pageable, SearchInputForm searchInputForm) {
+        if(searchInputForm.getSortTargetColumn() == Column.ENR_MODEL_NO) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "enuriModelNo");
         } else if(searchInputForm.getSortTargetColumn() == Column.PL_NO) {
-            return buyHistory.plNo.asc();
-        } else return buyHistory.buyHistoryId.integrationBuyNo.asc();
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "plNo");
+        }
+        return pageable;
     }
 
     private NumberExpression getAggregationResult(SearchInputForm searchInputForm) throws NotDefinedAggregationException, InvalidSumTargetException {
