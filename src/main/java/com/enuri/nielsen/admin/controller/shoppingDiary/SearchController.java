@@ -37,7 +37,6 @@ public class SearchController {
 
     @GetMapping("/admin/search")
     public String search(@Valid SearchInputForm searchInputForm, Model model, Error error, Pageable pageable) {
-        System.out.println(searchInputForm.toString());
         Page<SearchResult> searchResultList = buyHistoryService.search(searchInputForm, pageable);
         model.addAttribute("searchInputForm", searchInputForm);
         model.addAttribute("searchResultList", searchResultList);

@@ -28,7 +28,7 @@ class SearchControllerTest {
     @DisplayName("닐슨 구매 내역 데이터 조회 뷰 보여주는지 여부")
     @Test
     void showNielSenSearchView() throws Exception {
-        mockMvc.perform(get("/admin/search"))
+        mockMvc.perform(get("/"))
                 .andExpect(view().name("admin/search"))
                 .andExpect(status().isOk());
     }
@@ -47,6 +47,7 @@ class SearchControllerTest {
         searchInputForm.setEnuriRepCateCode("11111");
         searchInputForm.setEnuriModelNo("");
         searchInputForm.setStartBuyDate(LocalDate.parse("2021-08-03"));
+        searchInputForm.setEndBuyDate(LocalDate.parse("2021-08-03"));
         searchInputForm.setSortTargetColumn(null);
         searchInputForm.setAggregation(Aggregation.COUNT);
         searchInputForm.setAggregationTargetColumn(Column.ENR_MODEL_NO);
@@ -59,6 +60,7 @@ class SearchControllerTest {
                 .param("enuriRepCateCode", "11111")
                 .param("enuriModelNo", "")
                 .param("startBuyDate", "2021-08-03")
+                .param("endBuyDate","2021-08-03")
                 .param("sortTargetColumn", "")
                 .param("aggregation", "COUNT")
                 .param("aggregationTargetColumn", "ENR_MODEL_NO")

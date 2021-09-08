@@ -41,6 +41,8 @@ class BuyHistoryServiceTest {
         searchInputForm.setSortTargetColumn(null);
         searchInputForm.setAggregation(Aggregation.COUNT);
         searchInputForm.setAggregationTargetColumn(Column.ENR_MODEL_NO);
+        searchInputForm.setStartBuyDate(LocalDate.parse("2021-08-03"));
+        searchInputForm.setEndBuyDate(LocalDate.parse("2021-08-03"));
 
         buyHistoryService.search(searchInputForm, Pageable.ofSize(20));
 
@@ -69,6 +71,8 @@ class BuyHistoryServiceTest {
         searchInputForm.setAggregation(Aggregation.COUNT);
         searchInputForm.setAggregationTargetColumn(Column.ENR_MODEL_NO);
         searchInputForm.setSearchMode(SearchMode.AGGREGATION);
+        searchInputForm.setStartBuyDate(LocalDate.parse("2021-08-03"));
+        searchInputForm.setEndBuyDate(LocalDate.parse("2021-08-03"));
 
         buyHistoryService.search(searchInputForm, Pageable.ofSize(20));
 

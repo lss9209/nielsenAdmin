@@ -21,8 +21,13 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport implements BuyHistoryRepositoryExtension {
+
+    private final String DEFAULT_START_BUY_DATE = "20210101";
+    private final String DEFAULT_END_BUY_DATE = LocalDate.now().toString().replace("-","");
 
     QBuyHistory buyHistory = QBuyHistory.buyHistory;
     QModelMasterInfo modelMasterInfo = QModelMasterInfo.modelMasterInfo;
@@ -63,8 +68,6 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                         buyHistory.goodsName, buyHistory.goodsOptionValue, buyHistory.plNo, buyHistory.smartDeliveryShoppingMallCode,
                         buyHistory.adjustedBuyQuantity))
                 .where(buyHistory.deleteCode.eq("0")
-                        .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
-                        .and(buyHistory.buyDate.eq("20210701"))
                         .and(containsGoodsName(searchInputForm))
                         .and(eqGoodsOptionValue(searchInputForm))
                         .and(eqEnuriRepCateCode(searchInputForm))
@@ -72,6 +75,7 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                         .and(eqPlNo(searchInputForm))
                         .and(betweenBuyDate(searchInputForm))
                         .and(betweenIndexDate(searchInputForm))
+                        .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
                 )
                 .leftJoin(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
                         .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
@@ -86,8 +90,6 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
         JPQLQuery<SearchResult> query = from(buyHistory)
                 .select(Projections.constructor(SearchResult.class, getAggregationResult(searchInputForm)))
                 .where(buyHistory.deleteCode.eq("0")
-                        .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
-                        .and(buyHistory.buyDate.eq("20210701"))
                         .and(containsGoodsName(searchInputForm))
                         .and(eqGoodsOptionValue(searchInputForm))
                         .and(eqEnuriRepCateCode(searchInputForm))
@@ -95,6 +97,7 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
                         .and(eqPlNo(searchInputForm))
                         .and(betweenBuyDate(searchInputForm))
                         .and(betweenIndexDate(searchInputForm))
+                        .and(buyHistory.payAmountExcludingShippingFee.gt(0L))
                 )
                 .leftJoin(modelMasterInfo).on(buyHistory.enuriModelNo.eq(modelMasterInfo.modelMasterInfoId.enuriModelNo)
                         .and(buyHistory.processingPeriodValue.eq(modelMasterInfo.modelMasterInfoId.processingPeriodValue)))
@@ -138,11 +141,13 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
         LocalDate startBuyDate = searchInputForm.getStartBuyDate();
         LocalDate endBuyDate = searchInputForm.getEndBuyDate();
 
-        if(startBuyDate == null || endBuyDate == null) return null;
-        String startBuyDateStr = convertToNormalDateStrFormat(startBuyDate);
-        String endBuyDateStr = convertToNormalDateStrFormat(endBuyDate);
-
-        return buyHistory.buyDate.between(startBuyDateStr, endBuyDateStr);
+        if(startBuyDate == null || endBuyDate == null) {
+            return buyHistory.buyDate.between(DEFAULT_START_BUY_DATE, DEFAULT_END_BUY_DATE);
+        } else {
+            String startBuyDateStr = convertToNormalDateStrFormat(startBuyDate);
+            String endBuyDateStr = convertToNormalDateStrFormat(endBuyDate);
+            return buyHistory.buyDate.between(startBuyDateStr, endBuyDateStr);
+        }
     }
 
     private String convertToNormalDateStrFormat(LocalDate normalDate) {
@@ -216,4 +221,5 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
         }
         throw new NotDefinedAggregationTargetColumnException();
     }
+
 }
