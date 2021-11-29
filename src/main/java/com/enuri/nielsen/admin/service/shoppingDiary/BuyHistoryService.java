@@ -86,7 +86,7 @@ public class BuyHistoryService {
         Calendar cal = Calendar.getInstance();
         int year = Integer.parseInt(switchedIndexDateYearStr);
         int month = Integer.parseInt(switchedIndexDateMonthStr);
-        cal.set(year, month, 10);
+        cal.set(year, month, -1);
         return String.valueOf(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
     }
 }

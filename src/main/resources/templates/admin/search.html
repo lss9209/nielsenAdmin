@@ -10,28 +10,28 @@
       <div class="col-2 mt-5 pt-3" style="border:1px solid black; height: 188px;">
         <div style="margin-bottom:5px;"><b>조회할 기준열 선택</b></div>
         <div style="border:1px solid black; padding-left:5px; padding-top:5px;">
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ENR_MODEL_NO">ENR_MODEL_NO</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PL_NO">PL_NO</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="BUY_DATE">BUY_DATE</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_NAME">GOODS_NAME</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_OPTN_VLU">GOODS_OPTN_VLU</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PROC_PRD_VLU">PROC_PRD_VLU</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="SMTD_SHOP_CODE">SMTD_SHOP_CODE</label>
-          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ADJ_BUY_QNTY">ADJ_BUY_QNTY</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ENR_MODEL_NO" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO) : true}">ENR_MODEL_NO</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PL_NO" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO) : true}">PL_NO</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="BUY_DATE" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).BUY_DATE) : true}">BUY_DATE</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_NAME" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_NAME) : true}">GOODS_NAME</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="GOODS_OPTN_VLU" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).GOODS_OPTN_VLU) : true}">GOODS_OPTN_VLU</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="PROC_PRD_VLU" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PROC_PRD_VLU) : true}">PROC_PRD_VLU</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="SMTD_SHOP_CODE" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).SMTD_SHOP_CODE) : true}">SMTD_SHOP_CODE</label>
+          <label style="margin-right:5px"><input type="checkbox" name="selectedColumnSet" value="ADJ_BUY_QNTY" th:checked="${searchInputForm != null ? searchInputForm.selectedColumnSet.contains(T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ADJ_BUY_QNTY) : true}">ADJ_BUY_QNTY</label>
         </div>
       </div>
       <div class="col-5 mt-5 pt-3" style="border:1px solid black; padding-bottom:15px; height: 188px;">
         <div style="margin-bottom:5px;"><b>조건 선택</b></div>
         <div style="border:1px solid black">
-          <label style="margin-top:10px; margin-left:5px;">상품명 <input style="margin-left:12px" type="text" name="goodsName"></label>
-          <label style="margin-top:10px; margin-left:5px;">상품옵션명 <input type="text" name="goodsOptionValue"></label>
-          <label style="margin-top:10px; margin-left:5px;">카테코드 <input type="text" name="enuriRepCateCode"></label>
-          <label style="margin-top:10px; margin-left:5px;">모델번호 <input type="text" name="enuriModelNo"></label>
-          <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:24px" type="text" name="plNo"></label>
-          <label style="margin-top:10px; margin-left:5px;">구매일자 <input type="date" name="startBuyDate"><input type="date" name="endBuyDate"></label>
+          <label style="margin-top:10px; margin-left:5px;">상품명 <input style="margin-left:12px" type="text" name="goodsName" th:value="${searchInputForm != null ? searchInputForm.goodsName : ''}"></label>
+          <label style="margin-top:10px; margin-left:5px;">상품옵션명 <input type="text" name="goodsOptionValue" th:value="${searchInputForm != null ? searchInputForm.goodsOptionValue : ''}"></label>
+          <label style="margin-top:10px; margin-left:5px;">카테코드 <input type="text" name="enuriRepCateCode" th:value="${searchInputForm != null ? searchInputForm.enuriRepCateCode : ''}"></label>
+          <label style="margin-top:10px; margin-left:5px;">모델번호 <input type="text" name="enuriModelNo" th:value="${searchInputForm != null ? searchInputForm.enuriModelNo : ''}"></label>
+          <label style="margin-top:10px; margin-left:5px;">PL_NO <input style="margin-left:24px" type="text" name="plNo" th:value="${searchInputForm != null ? searchInputForm.plNo : ''}"></label>
+          <label style="margin-top:10px; margin-left:5px;">구매일자 <input type="date" name="startBuyDate" th:value="${searchInputForm != null ? searchInputForm.startBuyDate : ''}"><input type="date" name="endBuyDate" th:value="${searchInputForm != null ? searchInputForm.endBuyDate : ''}"></label>
           <label style="margin-top:10px; margin-left:25px;">INDEX
-            <input id="startIndexDate" type="date" name="startIndexDate" onchange="switchNormalDateToIndexDate('startIndexDate')">
-            <input id="endIndexDate" type="date" name="endIndexDate" onchange="switchNormalDateToIndexDate('endIndexDate')">
+            <input id="startIndexDate" type="date" name="startIndexDate" onchange="switchNormalDateToIndexDate('startIndexDate')" th:value="${searchInputForm != null ? searchInputForm.startIndexDate : ''}">
+            <input id="endIndexDate" type="date" name="endIndexDate" onchange="switchNormalDateToIndexDate('endIndexDate')" th:value="${searchInputForm != null ? searchInputForm.endIndexDate : ''}">
           </label>
         </div>
       </div>
@@ -39,24 +39,25 @@
         <div><b>정렬 선택</b></div>
         <select class="custom-select" name="sortTargetColumn" form="searchForm">
           <option value="">기본 정렬</option>
-          <option value="PL_NO">PL_NO</option>
-          <option value="ENR_MODEL_NO">모델번호</option>
+          <option value="PL_NO" th:selected = "${searchInputForm != null ? searchInputForm.sortTargetColumn == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO : false}">PL_NO</option>
+          <option value="ENR_MODEL_NO" th:selected = "${searchInputForm != null ? searchInputForm.sortTargetColumn == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO : false}">모델번호</option>
         </select>
         <div style="margin-top:13px;"><b>집계방식 선택</b></div>
         <select class="custom-select" name="aggregation" form="searchForm" style="width:131px; float:left;">
           <option value="">사용 안함</option>
-          <option value="SUM">SUM</option>
-          <option value="COUNT">COUNT</option>
-          <option value="COUNT_DISTINCT">COUNT(DISTINCT)</option>
+          <option value="SUM" th:selected = "${searchInputForm != null ? searchInputForm.aggregation == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation).SUM : false}">SUM</option>
+          <option value="COUNT" th:selected = "${searchInputForm != null ? searchInputForm.aggregation == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation).COUNT : false}">COUNT</option>
+          <option value="COUNT_DISTINCT" th:selected = "${searchInputForm != null ? searchInputForm.aggregation == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Aggregation).COUNT_DISTINCT : false}">COUNT(DISTINCT)</option>
         </select>
         <div style="margin-top:-18px; margin-left:135px;"><b>집계 대상열 선택</b></div>
         <select class="custom-select" name="aggregationTargetColumn" form="searchForm" style="width:131px; margin-left:5px;">
           <option value=""></option>
-          <option value="ENR_MODEL_NO">ENR_MODEL_NO</option>
-          <option value="PL_NO">PL_NO</option>
+          <option value="ENR_MODEL_NO" th:selected = "${searchInputForm != null ? searchInputForm.aggregationTargetColumn == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).ENR_MODEL_NO : false}">ENR_MODEL_NO</option>
+          <option value="PL_NO" th:selected = "${searchInputForm != null ? searchInputForm.aggregationTargetColumn == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO : false}">PL_NO</option>
         </select>
       </div>
       <input type="submit" value="검색" style="height:30px; margin-top:206px; margin-left:10px; float:left;">
+      <button type="button" class="btn btn-outline-info" style="height:30px; margin-top:206px; margin-left:10px; font-size:12px;" onclick="window.location.href = '/'">조건 초기화</button>
       <div class="col-4 mt-5 pt-3">
       </div>
     </div>
