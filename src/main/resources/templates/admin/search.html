@@ -56,7 +56,7 @@
           <option value="PL_NO" th:selected = "${searchInputForm != null ? searchInputForm.aggregationTargetColumn == T(com.enuri.nielsen.admin.domain.shoppingDiary.enums.Column).PL_NO : false}">PL_NO</option>
         </select>
       </div>
-      <input type="submit" value="검색" style="height:30px; margin-top:206px; margin-left:10px; float:left;">
+      <input id="searchBtn" type="button" value="검색" style="height:30px; margin-top:206px; margin-left:10px; float:left;">
       <button type="button" class="btn btn-outline-info" style="height:30px; margin-top:206px; margin-left:10px; font-size:12px;" onclick="window.location.href = '/'">조건 초기화</button>
       <div class="col-4 mt-5 pt-3">
       </div>
@@ -201,6 +201,19 @@
           }
       });
   }
+  $("#searchBtn").click(function() {
+      var onlyNumRegex = new RegExp("^[0-9]*$");
+      if(!onlyNumRegex.test($('input[name=enuriRepCateCode]').val()) || !onlyNumRegex.test($('input[name=enuriModelNo]').val()) ||
+         !onlyNumRegex.test($('input[name=plNo]').val())) {
+          alert("카테코드, 모델번호, PL_NO 입력칸에는 숫자만 입력가능합니다.");
+      } else if(($('select[name=aggregation]').val() != '') && ($('select[name=aggregationTargetColumn]').val() == '')) {
+          alert("집계 대상열을 선택해 주십시오.");
+      } else if(($('select[name=aggregation]').val() == 'SUM') && ($('select[name=aggregationTargetColumn]').val() == 'ENR_MODEL_NO')) {
+          alert("ENR_MODEL_NO 칼럼은 SUM 연산을 수행할 수 없습니다.");
+      } else {
+          $("#searchForm").submit();
+      }
+  });
 </script>
 <script th:replace="fragments.html :: loadingWithLoadingImage"></script>
 </body>
