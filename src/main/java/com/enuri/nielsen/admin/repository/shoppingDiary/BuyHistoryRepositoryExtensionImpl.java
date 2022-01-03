@@ -16,7 +16,6 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -109,31 +108,31 @@ public class BuyHistoryRepositoryExtensionImpl extends QuerydslRepositorySupport
 
     private BooleanExpression containsGoodsName(SearchInputForm searchInputForm) {
         String goodsName = searchInputForm.getGoodsName();
-        if(goodsName == null || Strings.isEmpty(goodsName)) return null;
+        if(goodsName == null || goodsName.isEmpty()) return null;
         return buyHistory.goodsName.contains(goodsName);
     }
 
     private BooleanExpression eqGoodsOptionValue(SearchInputForm searchInputForm) {
         String goodsOptionValue = searchInputForm.getGoodsOptionValue();
-        if(goodsOptionValue == null || Strings.isEmpty(goodsOptionValue)) return null;
+        if(goodsOptionValue == null || goodsOptionValue.isEmpty()) return null;
         return buyHistory.goodsOptionValue.eq(goodsOptionValue);
     }
 
     private BooleanExpression eqEnuriRepCateCode(SearchInputForm searchInputForm) {
         String enuriCateCode = searchInputForm.getEnuriRepCateCode();
-        if(enuriCateCode == null || Strings.isEmpty(enuriCateCode)) return null;
+        if(enuriCateCode == null || enuriCateCode.isEmpty()) return null;
         return buyHistory.enuriCateCode.eq(enuriCateCode);
     }
 
     private BooleanExpression eqEnuriModelNo(SearchInputForm searchInputForm) {
         String enuriModelNo = searchInputForm.getEnuriModelNo();
-        if(enuriModelNo == null || Strings.isEmpty(enuriModelNo)) return null;
+        if(enuriModelNo == null || enuriModelNo.isEmpty()) return null;
         return buyHistory.enuriModelNo.eq(Long.parseLong(enuriModelNo.trim()));
     }
 
     private BooleanExpression eqPlNo(SearchInputForm searchInputForm) {
         String plNo = searchInputForm.getPlNo();
-        if(plNo == null || Strings.isEmpty(plNo)) return null;
+        if(plNo == null || plNo.isEmpty()) return null;
         return buyHistory.plNo.eq(Long.parseLong(plNo.trim()));
     }
 
